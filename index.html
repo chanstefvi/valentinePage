@@ -118,6 +118,18 @@
       0% { transform: scale(0.6); opacity: 0; }
       100% { transform: scale(1); opacity: 1; }
     }
+
+    .bunny {
+      font-size: 44px;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+      100% { transform: scale(1); opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -125,8 +137,10 @@
   <div class="floating-hearts" id="floatingHearts"></div>
 
   <div class="card">
-    <div class="icons">🐱 ❤️</div>
-    <h1>Aditi<br>will you be my Valentine?</h1>
+    <div class="icons">
+  <div class="bunny">🐰🥺❤️</div>
+</div>
+    <h1>Rups<br>will you be my Valentine?</h1>
 
     <div class="buttons" id="btnArea">
       <button id="yes">Yes 💖</button>
@@ -153,13 +167,17 @@
       noBtn.style.top = y + 'px';
     }
 
-    btnArea.addEventListener('mousemove', e => {
+        btnArea.addEventListener('mousemove', e => {
       const r = noBtn.getBoundingClientRect();
       if (Math.abs(e.clientX - (r.left + r.width / 2)) < 60 &&
           Math.abs(e.clientY - (r.top + r.height / 2)) < 40) {
         moveNo();
       }
     });
+
+    // mobile touch support
+    btnArea.addEventListener('touchstart', moveNo);
+    btnArea.addEventListener('touchmove', moveNo);
 
     yesBtn.addEventListener('click', () => {
       btnArea.style.display = 'none';
