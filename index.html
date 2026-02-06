@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Be My Valentine 💖</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      font-family: 'Comic Sans MS', 'Segoe UI', cursive;
+      overflow: hidden;
+    }
+
+    .card {
+      background: #fff0f6;
+      border-radius: 24px;
+      padding: 40px 30px 50px;
+      width: min(92vw, 420px);
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(255, 105, 180, 0.35);
+      position: relative;
+    }
+
+    .hearts {
+      position: absolute;
+      inset: -20px;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .heart {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: #ff5fa2;
+      transform: rotate(45deg);
+      opacity: 0.8;
+      animation: float 6s linear infinite;
+    }
+    .heart::before, .heart::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: #ff5fa2;
+      border-radius: 50%;
+    }
+    .heart::before { left: -8px; }
+    .heart::after { top: -8px; }
+
+    @keyframes float {
+      from { transform: translateY(120%) rotate(45deg); }
+      to { transform: translateY(-140%) rotate(45deg); }
+    }
+
+    h1 {
+      margin: 10px 0 8px;
+      color: #d6336c;
+      font-size: 28px;
+    }
+
+    p {
+      margin: 0 0 24px;
+      color: #7a2147;
+      font-size: 16px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      position: relative;
+      height: 60px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 14px 26px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+
+    #yes {
+      background: #ff4d8d;
+      color: white;
+    }
+
+    #yes:hover {
+      transform: scale(1.08);
+      box-shadow: 0 12px 22px rgba(255,77,141,0.5);
+    }
+
+    #no {
+      background: #ffd6e8;
+      color: #b0004b;
+      position: absolute;
+    }
+
+    .result {
+      display: none;
+      margin-top: 20px;
+      font-size: 18px;
+      color: #c9184a;
+      animation: pop 0.5s ease forwards;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="hearts" id="hearts"></div>
+    <h1>Will you be my Valentine? 💕</h1>
+    <p>I promise chocolates, cuddles, and endless love 🌸</p>
+
+    <div class="buttons" id="btnArea">
+      <button id="yes">Yes 💖</button>
+      <button id="no">No 🙈</button>
+    </div>
+
+    <div class="result" id="result">Yayyyy!! 💍💘 I knew you’d say YES! 💕</div>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById('no');
+    const yesBtn = document.getElementById('yes');
+    const btnArea = document.getElementById('btnArea');
+    const result = document.getElementById('result');
+    const hearts = document.getElementById('hearts');
+
+    // place No button initially
+    function placeNoRandom() {
+      const areaRect = btnArea.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+      const padding = 10;
+
+      const maxX = areaRect.width - btnRect.width - padding;
+      const maxY = areaRect.height - btnRect.height - padding;
+
+      const x = Math.random() * Math.max(maxX, 0);
+      const y = Math.random() * Math.max(maxY, 0);
+
+      noBtn.style.left = x + 'px';
+      noBtn.style.top = y + 'px';
+    }
+
+    placeNoRandom();
+
+    // run away when cursor gets close
+    btnArea.addEventListener('mousemove', (e) => {
+      const noRect = noBtn.getBoundingClientRect();
+      const distX = Math.abs(e.clientX - (noRect.left + noRect.width / 2));
+      const distY = Math.abs(e.clientY - (noRect.top + noRect.height / 2));
+      if (distX < 60 && distY < 40) {
+        placeNoRandom();
+      }
+    });
+
+    yesBtn.addEventListener('click', () => {
+      result.style.display = 'block';
+      btnArea.style.display = 'none';
+      burstHearts();
+    });
+
+    // floating hearts background
+    function spawnHeart() {
+      const h = document.createElement('div');
+      h.className = 'heart';
+      h.style.left = Math.random() * 100 + '%';
+      h.style.animationDuration = 4 + Math.random() * 4 + 's';
+      h.style.opacity = 0.5 + Math.random() * 0.5;
+      hearts.appendChild(h);
+      setTimeout(() => h.remove(), 8000);
+    }
+
+    function burstHearts() {
+      for (let i = 0; i < 30; i++) {
+        setTimeout(spawnHeart, i * 80);
+      }
+    }
+
+    // gentle ambient hearts
+    setInterval(spawnHeart, 700);
+  </script>
+</body>
+</html>
